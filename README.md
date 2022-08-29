@@ -6,7 +6,7 @@ cs 공부를 위해 정리합니다.
 
 ## 목차
 
-1. [Node.js](./nodejs.md)
+1. [Node.js](./cs/nodejs.md)
 
-2. [네트워크](./network.md)
+2. [네트워크](./cs/network.md)
 
