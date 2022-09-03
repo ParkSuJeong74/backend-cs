@@ -51,3 +51,24 @@ TCP(Transmission Control Protocol)는 OSI 7 layer와 TCP/IP 4 layer의 전송계
 > 차이점
 >
 > TCP는 연결성 서비스로 가상회선 방식을 제공하는 프로토콜이고 UDP는 비연결성 서비스로 데이터그램 방식을 제공하는 프로토콜이다. TCP는 흐름 제어와 혼잡 제어가 있어 속도가 느리고 3 way handshaking 과정도 있어 신뢰성이 높다. UDP는 흐름 제어와 혼잡 제어도 없고 연결 신호 절차도 없어 속도가 빠르고 신뢰성보다 연속성이 중요한 실시간 서비스에 사용된다.
+
+## TCP 3, 4 way handshake에 대해서 설명
+
+  <details>
+  <summary>TCP 3 way handshake</summary>
+TCP 3 way handshake는 TCP의 `접속 과정`이다. TCP 통신을 이용하여 데이터를 전송하기 위해 네트워크 연결을 설정하는 과정으로, 양쪽 모두 데이터를 전송할 준비가 되었음을 보장하고 전달이 시작되기 전에 다른쪽이 준비되었다는 것을 알 수 있도록 하는 것이다. 
+
+즉 통신을 하는 응용 프로그램이 데이터를 전송하기 전에 먼저 정확한 전송을 보장하기 위해 상대방 컴퓨터와 `사전에 세션을 수립`하는 과정이다.
+
+PAR을 사용하는 기기는 `ACK`를 받을 때까지 데이터 유닛을 재전송하것인데, 수신자가 데이터 유닛이 손상된 것을 확인하면 해당 세그먼트를 없앤다. 전달자는 `positive ack`가 오지 않은 데이터 유닛을 다시 보내는 것이다. 이 과정에서 `3개의 세그먼트`가 교환되는 것이 3 way handshake이다.
+
+클라이언트는 서버와 연결하기 위해 3 way handshake를 통해 연결을 요청한다. 클라이언트에서 `SYN(Synchronization)을 보내 서버에 연결 요청`을 한다. 세션을 설정하는데 사용되며 최초로 데이터를 전송할 때 임의의 랜덤한 `시퀀스 번호`를 함께 보낸다. 이때 클라이언트의 포트는 CLOSED에서 SYN_SENT로 변화하고 서버는 LISTEN 상태이다. 서버는 클라이언트로부터 SYN을 전송 받았다는 `ACK(Acknowledgement)`와 `SYN`의 시퀀스 번호에 TCP 계층에서의 길이 또는 양을 더한 것과 같은 값을 ACK에 포함하여 전송한다. 클라이언트의 포트는 CLOSED이고, 서버는 SYN_RCV 상태이다. 동기화에 대한 답변으로 클라이언트에서 시퀀스 번호에 1을 더하여 `ACK`를 돌려준다. 이때 전송할 데이터가 있다면 데이터를 전송할 수도 있다. 클라이언트의 포트는 `ESTABLISED(포트 연결 완료)` 상태이고 서버는 SYN_RCV에서 ESTABLISED로 변경된다. TCP는 3 way handshake로 데이터 송신과 수신이 가능하기 때문에 `full-duplex` 통신이 구축된다.
+
+1. Client(CLOSED->SYN_SENT) -- SYN --> Server(LISTEN)
+2. Client(SYN_SENT->CLOSED) <-- ACK, SYN -- Server(LISTEN->SYN_RCV)
+3. Client(CLOSED->ESTABLISED) -- ACK --> Server(SYN_RCV->ESTABLISED)
+
+> 설명
+>
+> TCP 3 way handshake는 TCP의 접속 과정이고 TCP 4 way handshake는 TCP의 접속 해제 과정이다. 3 way handshake는 사전에 세션을 연결하기 위해 3개의 세그먼트가 교환되는 것이 특징이고 클라이언트가 SYN를 서버에 보내 연결을 요청하고 서버는 ACK와 SYN의 시퀀스 번호에 TCP 계층의 길이를 포함해 클라이언트로 되돌려준다. 수신을 받은 클라이언트가 ACK를 서버에 되돌려주게 되면 포트가 ESTABLISED 상태가 되며 클라이언트와 서버 간의 full duplex 통신이 구축된다.
+
